@@ -1,4 +1,3 @@
-import axios from "axios";
 import RatingStars from "./RatingStars";
 
 interface Props {
@@ -7,14 +6,30 @@ interface Props {
   rating: number;
   category: string;
 }
+
+const delMovie = (name: string, picUrl: string, rating: number, category: string) => {
+  fetch("http://localhost:3001/getMovieByName", {
+    "headers": { "Content-Type": "application/json" },
+    "method": "POST",
+    body: JSON.stringify({ name: name })
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      fetch("http://localhost:3001/delMovie", {
+        "headers": { "Content-Type": "application/json" },
+        "method": "POST",
+        "body": JSON.stringify({ "name": name, "rating": rating, "category": category, "picUrl": picUrl, "_id": data._id })
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          window.location.href = "http://localhost:3000/admin";
+        });
+    });
+};
 function MovieBlock({ name, picUrl, rating, category }: Props) {
   const removeMovie = () => {
-    axios.post("http://localhost:3001/getMovieByName", { name: name }).then((res) => {
-      axios.post("http://localhost:3001/delMovie", { name: name, rating: rating, category: category, picUrl: picUrl, _id: res.data._id }).then((res) => {
-        console.log(res.data);
-        window.location.href = "http://localhost:3000/admin";
-      });
-    });
+    delMovie(name, picUrl, rating, category);
   };
 
   return (

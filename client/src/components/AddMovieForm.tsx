@@ -1,5 +1,4 @@
-import axios from "axios";
-import { PureComponent, useState } from "react";
+import { useState } from "react";
 import AddMovieInput from "./AddMovieInput";
 
 function addMovieForm() {

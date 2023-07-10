@@ -1,18 +1,18 @@
 import { CSSProperties, useEffect, useState } from "react";
-import { CategoryNav } from "../components/CategoryNav";
-import MainPanel from "../components/MainPanel";
 import SimpleNav from "../components/SimpleNav";
-import PageNavBtn from "../components/PageNavBtn";
-import axios from "axios";
 import AdminBlock from "../components/AdminBlock";
 
 function Admin() {
   const [movieList, setMovieList] = useState([{ name: " ", rating: 4, picUrl: " ", category: " " }]);
+  let movies = true;
 
   useEffect(() => {
     fetch("http://localhost:3001/getMovies")
       .then((response) => response.json())
-      .then((data) => setMovieList(data));
+      .then((data) => {
+        data[0] == null ? setMovieList(data) : (movies = true);
+        console.log(data);
+      });
   }, []);
 
   const appStyle: CSSProperties = { backgroundColor: "#66aaff", height: "100vh", margin: "0px", overflow: "hidden" };
@@ -24,15 +24,24 @@ function Admin() {
         className="d-flex"
         style={{ height: "100%", gap: "30px", margin: "30px" }}
       >
-        {movieList.map((movie, index) => (
-          <AdminBlock
-            name={movie.name}
-            category={movie.category}
-            rating={movie.rating}
-            picUrl={movie.picUrl}
-            key={index}
-          />
-        ))}
+        {movies ? (
+          <h1
+            className="translate-middle start-50 top-50"
+            style={{ position: "absolute", fontSize: "5rem" }}
+          >
+            No movies
+          </h1>
+        ) : (
+          movieList.map((movie, index) => (
+            <AdminBlock
+              name={movie.name}
+              category={movie.category}
+              rating={movie.rating}
+              picUrl={movie.picUrl}
+              key={index}
+            />
+          ))
+        )}
       </div>
     </div>
   );

@@ -2,18 +2,19 @@ import { CSSProperties, useEffect, useState } from "react";
 import { CategoryNav } from "./components/CategoryNav";
 import MainPanel from "./components/MainPanel";
 import SimpleNav from "./components/SimpleNav";
-import PageNavBtn from "./components/PageNavBtn";
-import axios from "axios";
 
 function App() {
   const cats: string[] = ["all", "action", "drama", "comedy"];
 
   const [movieList, setMovieList] = useState([{ name: " ", rating: 4, picUrl: " ", category: " " }]);
-
+  let movieListFromDB = [{ name: " ", rating: 4, picUrl: " ", category: " " }];
   useEffect(() => {
     fetch("http://localhost:3001/getMovies")
       .then((response) => response.json())
-      .then((data) => setMovieList(data));
+      .then((data) => (movieListFromDB = data));
+    if (movieListFromDB[0]) {
+      setMovieList(movieListFromDB);
+    }
   }, []);
 
   const [currentCat, setCurrentCat] = useState("all");
@@ -31,6 +32,12 @@ function App() {
             CategoriesList={cats}
             SetCat={setCurrentCat}
           />
+          <h1
+            className="translate-middle start-50 top-50"
+            style={{ position: "absolute", fontSize: "5rem" }}
+          >
+            No movies
+          </h1>
         </div>
       </div>
     );
