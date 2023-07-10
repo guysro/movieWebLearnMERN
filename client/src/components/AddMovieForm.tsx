@@ -7,14 +7,18 @@ function addMovieForm() {
   const [rating, setRating] = useState(0);
   const [cat, setCat] = useState("");
   const [pic, setPic] = useState("");
-  const [link, setLink] = useState("");
 
-  const submit = () => {
+  const submit = async () => {
     if (name.length > 0 && cat.length > 0 && pic.length > 0 && rating <= 5 && rating > 0) {
-      axios.post("http://localhost:3001/addMovie", { name: name, rating: rating, category: cat, picUrl: pic, linkUrl: link }).then((response) => {
-        alert("MOVIE ADDED");
-        window.location.href = "http://localhost:3000/addMovie";
+      const response = await fetch("http://localhost:3001/addMovie", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ "name": name, "rating": rating, "category": cat, "picUrl": pic })
       });
+      const data = await response.json();
+      console.log(data);
+      alert("MOVIE ADDED");
+      window.location.href = "http://localhost:3000/addMovie";
     } else if (rating > 5 || rating < 0) {
       alert("RATING MUST BE BETWEEN 0 AND 5");
     } else {
@@ -54,13 +58,6 @@ function addMovieForm() {
         placeHolder="Movie Picture URL:"
         onChange={(event: any) => {
           setPic(event.target.value);
-        }}
-      />
-      <AddMovieInput
-        type="text"
-        placeHolder="Movie trailer link URL:"
-        onChange={(event: any) => {
-          setLink(event.target.value);
         }}
       />
       <input

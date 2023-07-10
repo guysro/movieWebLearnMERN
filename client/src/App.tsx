@@ -11,9 +11,9 @@ function App() {
   const [movieList, setMovieList] = useState([{ name: " ", rating: 4, picUrl: " ", category: " " }]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/getMovies").then((response) => {
-      setMovieList(response.data);
-    });
+    fetch("http://localhost:3001/getMovies")
+      .then((response) => response.json())
+      .then((data) => setMovieList(data));
   }, []);
 
   const [currentCat, setCurrentCat] = useState("all");
