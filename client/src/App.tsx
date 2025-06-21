@@ -2,20 +2,23 @@ import { CSSProperties, useEffect, useState } from "react";
 import { CategoryNav } from "./components/CategoryNav";
 import MainPanel from "./components/MainPanel";
 import SimpleNav from "./components/SimpleNav";
+import { data } from "react-router-dom";
 
 function App() {
   const cats: string[] = ["all", "action", "drama", "comedy"];
 
-  const [movieList, setMovieList] = useState([{ name: " ", rating: 4, picUrl: " ", category: " " }]);
+  const [movieList, setMovieList] = useState([{ name: " ", rating: 2, picUrl: " ", category: " " }]);
   let movieListFromDB = [{ name: " ", rating: 4, picUrl: " ", category: " " }];
   useEffect(() => {
     fetch("http://localhost:3001/getMovies")
       .then((response) => response.json())
-      .then((data) => (movieListFromDB = data));
-    if (movieListFromDB[0]) {
-      setMovieList(movieListFromDB);
-    }
-  }, []);
+      .then((data) => {
+        console.log(data);
+        if(data.length > 0)
+          setMovieList(data)
+        movieListFromDB = data;
+      });
+  }, []);  
 
   const [currentCat, setCurrentCat] = useState("all");
 

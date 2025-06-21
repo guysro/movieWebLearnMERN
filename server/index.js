@@ -7,7 +7,7 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect("mongodb+srv://guykube100:Guy123Sroka@movies.0kglxjw.mongodb.net/MoviesDB?retryWrites=true&w=majority");
+mongoose.connect("mongodb+srv://guykube100:Guy123Sroka@cluster0.dilr4uc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
 
 async function getMovies() {
   const Movies = await MovieModel.find();
@@ -44,7 +44,7 @@ app.post("/addMovie", async function (req, res) {
   const movie = req.body;
   const newMovie = new MovieModel(movie);
   await newMovie.save();
-
+  console.log("succesfully added movie!");
   res.json(movie);
 });
 
